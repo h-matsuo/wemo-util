@@ -13,11 +13,16 @@ WeMo Insight Switch Utility Tool by Hiroyuki Matsuo
 ## Usage
 
 ```
-Usage: node wemo-util <command> [<args>]
+Usage: node [--log <path>] wemo-util <command> [<args>]
 
 wemo-util は，Node.js から同一ローカルネットワーク内の WeMo Insight Switch を
 操作することができるユーティリティツールです．
 Node v4.4.4 での動作を確認しています．
+
+次のオプションが使用できます：
+
+--log <path>
+        ログを <path> で示す外部ファイルに出力します．
 
 次のコマンドが使用できます：
 
@@ -33,5 +38,5 @@ track [--restheart <URL>]
         電力消費状況などを，約 1 秒ごとに監視します．
         ログデータは，デフォルトではカレントディレクトリに書き出します．
         --restheart を指定すると，<URL> の RESTHeart にログデータを送信します．
-        <URL> = http://<host>:<port>/<data_base>/<collection>/
+        <URL> := http://<host>:<port>/<data_base>/<collection>/
 ```
