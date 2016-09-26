@@ -62,7 +62,7 @@ function exec_search() {
         if (location === null) {
             print_log('No WeMo Insight Switches are found.');
         } else {
-            print_log('WeMo Insight Switch has found: ' + location.host + ':' + location.port);
+            print_log('Found: ' + location.host + ':' + location.port);
         }
     });
 }
@@ -76,49 +76,48 @@ function exec_track(argv) {
 function track_wemo(argv) {
     print_log('Looking for WeMo Insight Switch...');
     var interval_id;
-    // WeMo が見つかるまで繰り返す
-    interval_id = setInterval(function () {
-        search(function (location) {
-            if (location === null) {
-                print_log('Error: No WeMo Insight Switches are found; I\'ll try again in 500 msec...');
-                return;
-            }
-            print_log('WeMo Insight Switch has found: ' + location.host + ':' + location.port);
-            clearInterval(interval_id);
-            // WeMo へのリクエストが失敗するまで繰り返す
-            interval_id = setInterval(function () {
-                request(location, function (err, log_entry) {
-                    if (err) {
-                        clearInterval(interval_id);
-                        print_log('Error: Problem with request to WeMo: ' + err);
-                        track_wemo(argv);
-                        return;
-                    }
-                    // Ajax で RESTHeart に送信
-                    if (argv[0] === '--restheart') {
-                        ajax
-                            .post(argv[1])  // URL
-                            .set('Content-Type', 'application/json')
-                            .send(JSON.stringify(log_entry, null, '    '))
-                            .end(function(err, res){
-                                if (err) {
-                                    print_log('Error: Problem with insertion to MongoDB:\n' + JSON.stringify(err, null, '    '));
-                                    return;
-                                }
-                            });
-                    // track.log ファイルに追記
-                    } else {
-                        fs.appendFile('./track.log', JSON.stringify(log_entry, null, '    '), 'utf8', function (err) {
+    // LAN 内の WeMo を探索 
+    search(function (location) {
+        if (location === null) {
+            print_log('Error: No WeMo Insight Switches are found; I\'ll try again...');
+            track_wemo(argv);   // WeMo を探しなおす
+            return;
+        }
+        print_log('Found: ' + location.host + ':' + location.port);
+        clearInterval(interval_id);
+        // WeMo へのリクエストが失敗するまで繰り返す
+        interval_id = setInterval(function () {
+            request(location, function (err, log_entry) {
+                if (err) {
+                    clearInterval(interval_id);
+                    print_log('Error: Problem with request to WeMo: ' + err);
+                    track_wemo(argv);   // WeMo を探しなおす
+                    return;
+                }
+                // Ajax で RESTHeart に送信
+                if (argv[0] === '--restheart') {
+                    ajax
+                        .post(argv[1])  // URL
+                        .set('Content-Type', 'application/json')
+                        .send(JSON.stringify(log_entry, null, '    '))
+                        .end(function(err, res){
                             if (err) {
-                                print_log('Error: Can\'t open the log file: track.log');
+                                print_log('Error: Problem with insertion to MongoDB:\n' + JSON.stringify(err, null, '    '));
                                 return;
                             }
                         });
-                    }
-                });
-            }, 1000);
-        });
-    }, 2500);
+                // track.log ファイルに追記
+                } else {
+                    fs.appendFile('./track.log', JSON.stringify(log_entry, null, '    '), 'utf8', function (err) {
+                        if (err) {
+                            print_log('Error: Can\'t open the log file: track.log');
+                            return;
+                        }
+                    });
+                }
+            });
+        }, 1000);
+    });
 }
 
 function print_log(msg) {
