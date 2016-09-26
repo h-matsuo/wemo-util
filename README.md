@@ -1,6 +1,6 @@
 # wemo-util
 
-WeMo Insight Switch Utility Tool by Hiroyuki Matsuo
+WeMo Insight Switch Utility Tool by [Hiroyuki Matsuo](http://sdl.ist.osaka-u.ac.jp/~h-matsuo/)
 
 ## Requirements
 
@@ -17,7 +17,7 @@ Usage: node [--log <path>] wemo-util <command> [<args>]
 
 wemo-util は，Node.js から同一ローカルネットワーク内の WeMo Insight Switch を
 操作することができるユーティリティツールです．
-Node v4.4.4 での動作を確認しています．
+Node v4.5.0 での動作を確認しています．
 
 次のオプションが使用できます：
 

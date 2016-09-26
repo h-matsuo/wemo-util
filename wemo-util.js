@@ -62,7 +62,7 @@ function exec_search() {
         if (location === null) {
             print_log('No WeMo Insight Switches are found.');
         } else {
-            print_log('WeMo Insight Switch has found: ' + location.host + ':' + locatoin.port);
+            print_log('WeMo Insight Switch has found: ' + location.host + ':' + location.port);
         }
     });
 }
@@ -83,7 +83,7 @@ function track_wemo(argv) {
                 print_log('Error: No WeMo Insight Switches are found; I\'ll try again in 1 sec...');
                 return;
             }
-            print_log('WeMo Insight Switch has found: ' + location.host + ':' + locatoin.port);
+            print_log('WeMo Insight Switch has found: ' + location.host + ':' + location.port);
             clearInterval(interval_id);
             // WeMo へのリクエストが失敗するまで繰り返す
             interval_id = setInterval(function () {
