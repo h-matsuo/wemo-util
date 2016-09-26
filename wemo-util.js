@@ -7,7 +7,7 @@ var search  = require('./lib/search.js');
 var request = require('./lib/request.js');
 var convert_date = require('./lib/convert_date.js');
 
-var log_out = null;
+var log_out = null; // ログの出力先；null なら標準出力
 
 // エントリポイント
 if (require.main === module) {
@@ -137,41 +137,3 @@ function print_log(msg) {
         });
     }
 }
-
-/***** OLD SOURCE *****
-function exec_track(argv) {
-    console.log('Start tracking...');
-    console.log('"Ctrl + C" to quit.')
-    setInterval(function () {
-        search(function (location) {
-            if (location === null) {
-                console.log('Error: No WeMo Insight Switches are found.');
-                return;
-            }
-            request(location, function (log_entry) {
-                if (log_entry === null) return;
-                if (argv[0] === '--restheart') {
-                    // Ajax で RESTHeart に送信
-                    ajax
-                        .post(argv[1])  // URL
-                        .set('Content-Type', 'application/json')
-                        .send(JSON.stringify(log_entry, null, '    '))
-                        .end(function(err, res){
-                            if (err !== null) {
-                                console.log('Error: Problem with inserting document to MongoDB:');
-                                console.log(err);
-                                return;
-                            }
-                        });
-                } else {
-                    // log.txt ファイルに追記
-                    fs.appendFile('./log.txt', JSON.stringify(log_entry, null, '    '), 'utf8', function (err) {
-                        console.log('Error: Can\'t append log data to the file.');
-                        return;
-                    });
-                }
-            });
-        });
-    }, 1000);
-}
-*/
