@@ -80,7 +80,7 @@ function track_wemo(argv) {
     interval_id = setInterval(function () {
         search(function (location) {
             if (location === null) {
-                print_log('Error: No WeMo Insight Switches are found; I\'ll try again in 1 sec...');
+                print_log('Error: No WeMo Insight Switches are found; I\'ll try again in 500 msec...');
                 return;
             }
             print_log('WeMo Insight Switch has found: ' + location.host + ':' + location.port);
@@ -118,7 +118,7 @@ function track_wemo(argv) {
                 });
             }, 1000);
         });
-    }, 1000);
+    }, 2500);
 }
 
 function print_log(msg) {

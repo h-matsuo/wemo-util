@@ -1,6 +1,6 @@
 # wemo-util
 
-WeMo Insight Switch Utility Tool by [Hiroyuki Matsuo](http://sdl.ist.osaka-u.ac.jp/~h-matsuo/)
+Utility Tool for [WeMo Insight Switch](http://www.belkin.com/us/support-product?pid=01t80000003JS3FAAW) by [Hiroyuki Matsuo](http://sdl.ist.osaka-u.ac.jp/~h-matsuo/)
 
 ## Requirements
 
