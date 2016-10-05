@@ -1,6 +1,96 @@
 // 2016/09/22 Hiroyuki Matsuo <h-matsuo@ist.osaka-u.ac.jp>
-// WeMo Insight Switch を Node.js から操作するツール
+/*
+ * wemo-util.js:
+ * WeMo Insight Switch を Node.js から操作するツール
+ */
 
+var util = require('./lib/util.js');
+
+// エントリポイント
+if (require.main === module) {
+    main();
+}
+
+function main() {
+    var location = {
+        'host': '192.168.146.113',
+        'port': 49153
+    }
+    execSearch();
+}
+
+
+// search コマンドの実行
+function execSearch() {
+    printLog('Searching for WeMo Insight Switch...')
+    util.searchWemo(1000, function (locations) {
+        if (locations.length < 1) {
+            printLog('Not found.');
+            return;
+        }
+        printLog('Found: ' + locations.length + ' device(s) in LAN.');
+        var number = 1;
+        for (var index = 0; index < locations.length; index++) {
+            util.getDevInfo(locations[index], function (err, info) {
+                printLog('#' + number + ':', true);
+                if (err) {
+                    printLog('    ERROR: Cannot get device information.', true);
+                    number++;
+                    return;
+                }
+                var foundWemo = '           host: ' + info.host + '\n' +
+                                '           port: ' + info.port + '\n' +
+                                '     Serial No.: ' + info.serial_no + '\n' +
+                                '    MAC Address: ' + info.mac_addr;
+                printLog(foundWemo, true);
+                number++;
+            });
+        }
+    });
+}
+
+
+// track コマンドの実行
+function execTrack(argv) {
+    // location 未指定時のエラー処理
+    printLog('Start tracking...');
+    console.log('"Ctrl + c" to quit.');
+}
+
+// ログの出力
+function printLog(msg,       /* 出力する文字列 */
+                  is_no_date /* 日付を出力しなくてよい場合は true */) {
+    // 日付付きの出力
+    if (is_no_date === false || is_no_date === undefined) {
+        var date    = util.convertDate(new Date());
+        var logData = '[' + date + '] ' + msg;
+        console.log(logData);
+    }
+    // 日付なしの出力
+    else {
+        console.log(msg);
+    }
+/*
+    var date = convert_date(new Date());
+    var log_data = '[' + date + '] ' + msg;
+    if (log_out === null) {
+        console.log(log_data);
+    } else {
+        log_data += '\n';
+        fs.appendFile(log_out, log_data, 'utf8', function (err) {
+            if (err) {
+                var file_path = log_out;
+                log_out = null;
+                console.log(log_data.substring(0, log_data.length - 1));
+                print_log('Error: Can\'t open the log file: ' + file_path);
+            }
+        });
+    }
+*/
+}
+
+
+/*
 var fs      = require('fs');
 var ajax    = require('superagent');
 var search  = require('./lib/search.js');
@@ -8,11 +98,6 @@ var request = require('./lib/request.js');
 var convert_date = require('./lib/convert_date.js');
 
 var log_out = null; // ログの出力先；null なら標準出力
-
-// エントリポイント
-if (require.main === module) {
-    main();
-}
 
 function main() {
 
@@ -137,3 +222,4 @@ function print_log(msg) {
         });
     }
 }
+*/
