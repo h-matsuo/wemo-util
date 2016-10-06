@@ -137,7 +137,7 @@ function execTrack(argv) {
                         '     Serial No.: ' + info.serial_no + '\n' +
                         '    MAC Address: ' + info.mac_addr;
         util.printLog(foundWemo, true);
-        util.printLog('Start tracking WeMo Insight Switch...');
+        util.printLog('Start tracking WeMo...');
         console.log('"Ctrl + c" to quit.');
         util.trackWemo(location, restheartURI);
     });
