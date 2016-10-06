@@ -4,11 +4,11 @@ Utility Tool for [WeMo Insight Switch](http://www.belkin.com/us/support-product?
 
 ## Requirements
 
-* Node.js
+* [Node.js](https://nodejs.org/)
 
-* MongoDB
+* [MongoDB](https://www.mongodb.com/) *(optional)*
 
-* RESTHeart
+* [RESTHeart](http://restheart.org/) *(optional)*
 
 ## Usage
 
@@ -31,12 +31,13 @@ help
 
 search
         同一ローカルネットワーク内の WeMo Insight Switch を検索し，
-        そのロケーション（ホストおよびポート番号）を調べます．
+        そのロケーション（ホストおよびポート番号），シリアル番号，および
+        MAC アドレスを調べます．
 
-track [--restheart <URL>]
-        同一ローカルネットワーク内の WeMo Insight Switch に接続されている機器の
+track <host>:<port> [--restheart <URI>]
+        <host>:<port> で指定した WeMo Insight Switch に接続されている機器の
         電力消費状況などを，約 1 秒ごとに監視します．
         ログデータは，デフォルトではカレントディレクトリに書き出します．
-        --restheart を指定すると，<URL> の RESTHeart にログデータを送信します．
-        <URL> := http://<host>:<port>/<data_base>/<collection>/
+        --restheart を指定すると，<URI> の RESTHeart にログデータを送信します．
+        <URI> := http://<host>:<port>/<data_base>/<collection>/
 ```
